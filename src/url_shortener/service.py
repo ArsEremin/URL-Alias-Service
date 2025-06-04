@@ -22,7 +22,7 @@ class UrlService:
         return res.scalar_one_or_none()
 
     async def get_url_by_long(self, long_url: str):
-        query = select(Url).filter_by(long_url=long_url)
+        query = select(Url).filter_by(long_url=long_url, is_active=True)
         return await self._session.scalar(query)
 
     async def get_url_tokens(self, active_only: bool, offset: int, limit: int):

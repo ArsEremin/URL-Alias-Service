@@ -37,8 +37,8 @@ async def make_shorter(
 
     Проверяем, существует и доступен ли переданный адрес: если нет - кидаем ошибку\n
     Проверяем, что у нас еще нет сокращенного варианта урла для этого длинного адреса:
-      - если он уже есть, то возвращаем его
-      - если еще нет:
+      - если он уже есть, активен и не устарел, то возвращаем его
+      - если еще нет или существующий неактивен/устарел:
           1) Подбираем токен, которого еще нет в базе
           2) На основе этого токена и текущих настроек приложения генерируем полноценный короткий урл
           3) Возвращаем сгенерированный урл
@@ -50,7 +50,9 @@ async def make_shorter(
 
     existing_url = await service.get_url_by_long(url)
     if existing_url is not None:
-        return get_short_url(existing_url.token)
+        if existing_url.expires_at > datetime.now(timezone.utc):
+            return get_short_url(existing_url.token)
+        await service.deactivate_url(existing_url.token)
 
     url_token = await service.get_url_token()
     await service.add_short_url(url, url_token, user.id)
