@@ -26,8 +26,8 @@
 1. Создание и активация виртуального окружения
 ```commandline
 python -m venv venv
-source venv/bin/activate(для Linux и MacOS)
-venv\Scripts\activate.bat(для Windows)
+source venv/bin/activate (для Linux и MacOS)
+venv\Scripts\activate.bat (для Windows)
 ```
 
 2. Установка зависимостей
